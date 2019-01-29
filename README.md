@@ -1,2 +1,5 @@
-# dailycodingproblem
-Daily Coding Problem solutions repo
+# Daily Coding Problem
+
+## Author
+
+[@danikarik](https://github.com/danikarik)
