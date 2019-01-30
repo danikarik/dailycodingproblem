@@ -1,4 +1,4 @@
-package function
+package problem1
 
 import "testing"
 
