@@ -31,12 +31,32 @@ func TestNode(t *testing.T) {
 	}
 }
 
-var result *Node
+func TestNodeJSON(t *testing.T) {
+	node := deserializeJSON(serializeJSON(testNode))
+	actual := node.Left.Left.Val
+	valid := "left.left"
+	if actual != valid {
+		t.Errorf("failed: got %s, expected %s", actual, valid)
+	}
+}
+
+var (
+	result     *Node
+	resultJSON *Node
+)
 
 func BenchmarkNode(b *testing.B) {
-	var n *Node
+	var node *Node
 	for i := 0; i < b.N; i++ {
-		n = deserialize(serialize(testNode))
+		node = deserialize(serialize(testNode))
 	}
-	result = n
+	result = node
+}
+
+func BenchmarkNodeJSON(b *testing.B) {
+	var node *Node
+	for i := 0; i < b.N; i++ {
+		node = deserializeJSON(serializeJSON(testNode))
+	}
+	resultJSON = node
 }
