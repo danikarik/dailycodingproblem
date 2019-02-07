@@ -1,4 +1,4 @@
-package problem7
+package problem07
 
 func solver(s string, n int) int {
 	if n == 0 || n == 1 {

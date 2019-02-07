@@ -1,4 +1,4 @@
-package problem2
+package problem02
 
 func solver(in []int) []int {
 	out := make([]int, len(in))

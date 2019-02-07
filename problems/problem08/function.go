@@ -1,4 +1,4 @@
-package problem8
+package problem08
 
 // Node is a tree node.
 type Node struct {

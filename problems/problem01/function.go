@@ -1,4 +1,4 @@
-package problem1
+package problem01
 
 func solver(nums []int, k int) bool {
 	d := make(map[int]struct{})

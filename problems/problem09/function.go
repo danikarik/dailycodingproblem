@@ -1,4 +1,4 @@
-package problem9
+package problem09
 
 func solver(nums []int) int {
 	if nums == nil || len(nums) == 0 {
