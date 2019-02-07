@@ -19,8 +19,6 @@ So in the above example, A's both is B which when XOR'd with 0 would become B. T
 
 To implement add, we would need to update current tail's both to be XOR'd by its current both the new node's memory address. Then the new node's both would just point to the memory address of the current tail. Finally, we'd update the current tail to be equal to the new node.
 
-## Python
-
 ```python
 import ctypes
 
@@ -67,3 +65,5 @@ class XorLinkedList(object):
 def _get_obj(id):
     return ctypes.cast(id, ctypes.py_object).value
 ```
+
+`add` runs in O(1) time and get runs in O(N) time.
