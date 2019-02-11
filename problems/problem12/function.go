@@ -1,16 +1,16 @@
 package problem12
 
 func climb(n int, x []int) int {
-	cache := make([]int, n+1)
-	cache[0] = 1
-	for i := 1; i < n+1; i++ {
+	nums := make([]int, n+1)
+	nums[0] = 1
+	for stair := 1; stair < n+1; stair++ {
 		sum := 0
-		for _, n := range x {
-			if i-n >= 0 {
-				sum += cache[i-n]
+		for _, step := range x {
+			if stair-step >= 0 {
+				sum += nums[stair-step]
 			}
 		}
-		cache[i] += sum
+		nums[stair] += sum
 	}
-	return cache[n]
+	return nums[n]
 }
