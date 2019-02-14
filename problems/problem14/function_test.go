@@ -18,3 +18,13 @@ func TestEstimate(t *testing.T) {
 		t.Logf("π: %v, n: %v\n", pi, c.Given)
 	}
 }
+
+var result float64
+
+func BenchmarkEstimate(b *testing.B) {
+	var r float64
+	for i := 0; i < b.N; i++ {
+		r = estimate(1000000)
+	}
+	result = r
+}
