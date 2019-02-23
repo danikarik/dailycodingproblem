@@ -1,12 +1,13 @@
 package problem24
 
-// Node represents a binary tree node.
+// Node represents a locking binary tree node.
 type Node struct {
-	parent *Node
-	locked bool
-	Value  int
-	Left   *Node
-	Right  *Node
+	parent            *Node
+	isLocked          bool
+	lockedDescendants int
+	Value             interface{}
+	Left              *Node
+	Right             *Node
 }
 
 // AddChild appends child nodes to root.
@@ -27,55 +28,59 @@ func (n *Node) AddChild(child *Node) *Node {
 	return n
 }
 
+func (n *Node) canLockOrUnlock() bool {
+	if n.lockedDescendants > 0 {
+		return false
+	}
+	cur := n.parent
+	for cur != nil {
+		if cur.IsLocked() {
+			return false
+		}
+		cur = cur.parent
+	}
+	return true
+}
+
 // IsLocked returns whether the node is locked.
 func (n *Node) IsLocked() bool {
-	return n.locked
+	return n.isLocked
 }
 
-// Lock attempts to lock the node.
-// If it cannot be locked, then it should return false.
-// Otherwise, it should lock it and return true.
+// Lock searches the node's children and parents for a true is_locked attribute.
+// If it is set to true on any of them, then return false.
+// Otherwise, set the current node's is_locked to true and return true.
 func (n *Node) Lock() bool {
-	if n.parent != nil && n.parent.locked {
+	if n.IsLocked() {
 		return false
 	}
-	if ok := isValid(n); !ok {
+	if !n.canLockOrUnlock() {
 		return false
 	}
-	n.locked = true
+	n.isLocked = true
+	cur := n.parent
+	for cur != nil {
+		cur.lockedDescendants++
+		cur = cur.parent
+	}
 	return true
 }
 
-// Unlock unlocks the node.
-// If it cannot be unlocked, then it should return false.
-// Otherwise, it should unlock it and return true.
+// Unlock simply changes the node's attribute to false. If we want to be safe,
+// then we should search the node's children and parents as in lock to make sure we can actually unlock the node,
+// but that shouldn't ever happen.
 func (n *Node) Unlock() bool {
-	if n.parent != nil && n.parent.locked {
+	if !n.IsLocked() {
 		return false
 	}
-	if ok := isValid(n); !ok {
+	if !n.canLockOrUnlock() {
 		return false
 	}
-	n.locked = false
+	n.isLocked = false
+	cur := n.parent
+	for cur != nil {
+		cur.lockedDescendants--
+		cur = cur.parent
+	}
 	return true
-}
-
-func isValid(root *Node) bool {
-	leftOk, rightOk := true, true
-	if root.Left != nil {
-		if root.Left.IsLocked() {
-			return false
-		}
-		leftOk = isValid(root.Left)
-	}
-	if root.Right != nil {
-		if root.Right.IsLocked() {
-			return false
-		}
-		rightOk = isValid(root.Right)
-	}
-	if leftOk && rightOk {
-		return true
-	}
-	return false
 }

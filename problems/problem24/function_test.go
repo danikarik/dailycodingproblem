@@ -11,7 +11,7 @@ func TestIsLocked(t *testing.T) {
 	}{
 		{
 			Given: &Node{
-				locked: true,
+				isLocked: true,
 			},
 			Expected: true,
 		},
@@ -38,9 +38,9 @@ func TestAddChild(t *testing.T) {
 	}{
 		{
 			Given:         &Node{Value: 1},
-			Left:          &Node{Value: 2, locked: true},
+			Left:          &Node{Value: 2, isLocked: true},
 			Right:         (&Node{Value: 3}).AddChild(&Node{Value: 4}),
-			ExpectedLeft:  &Node{Value: 2, locked: true},
+			ExpectedLeft:  &Node{Value: 2, isLocked: true},
 			ExpectedRight: (&Node{Value: 3}).AddChild(&Node{Value: 4}),
 		},
 	}
@@ -62,7 +62,7 @@ func TestLock(t *testing.T) {
 		Expected bool
 	}{
 		{
-			Given:    (&Node{Value: 1}).AddChild(&Node{Value: 2}).AddChild(&Node{Value: 3, locked: true}),
+			Given:    (&Node{Value: 1, lockedDescendants: 1}).AddChild(&Node{Value: 2}).AddChild(&Node{Value: 3, isLocked: true}),
 			Expected: false,
 		},
 		{
@@ -70,7 +70,7 @@ func TestLock(t *testing.T) {
 			Expected: true,
 		},
 		{
-			Given:    (&Node{Value: 1}).AddChild((&Node{Value: 2}).AddChild(&Node{Value: 4}).AddChild(&Node{Value: 5, locked: true})).AddChild(&Node{Value: 3}),
+			Given:    (&Node{Value: 1, lockedDescendants: 1}).AddChild((&Node{Value: 2, lockedDescendants: 1}).AddChild(&Node{Value: 4}).AddChild(&Node{Value: 5, isLocked: true})).AddChild(&Node{Value: 3}),
 			Expected: false,
 		},
 	}
@@ -88,15 +88,15 @@ func TestUnlock(t *testing.T) {
 		Expected bool
 	}{
 		{
-			Given:    (&Node{Value: 1, locked: true}).AddChild(&Node{Value: 2}).AddChild(&Node{Value: 3, locked: true}),
+			Given:    (&Node{Value: 1, isLocked: true, lockedDescendants: 1}).AddChild(&Node{Value: 2}).AddChild(&Node{Value: 3, isLocked: true}),
 			Expected: false,
 		},
 		{
-			Given:    (&Node{Value: 1, locked: true}).AddChild(&Node{Value: 2}).AddChild(&Node{Value: 3}),
+			Given:    (&Node{Value: 1, isLocked: true}).AddChild(&Node{Value: 2}).AddChild(&Node{Value: 3}),
 			Expected: true,
 		},
 		{
-			Given:    (&Node{Value: 1, locked: true}).AddChild((&Node{Value: 2}).AddChild(&Node{Value: 4}).AddChild(&Node{Value: 5, locked: true})).AddChild(&Node{Value: 3}),
+			Given:    (&Node{Value: 1, isLocked: true, lockedDescendants: 1}).AddChild((&Node{Value: 2, lockedDescendants: 1}).AddChild(&Node{Value: 4}).AddChild(&Node{Value: 5, isLocked: true})).AddChild(&Node{Value: 3}),
 			Expected: false,
 		},
 	}
