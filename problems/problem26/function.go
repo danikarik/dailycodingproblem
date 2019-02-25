@@ -1,45 +1,49 @@
 package problem26
 
+import (
+	"fmt"
+)
+
 // Node represents a list's item structure.
 type Node struct {
 	Value interface{}
 	Next  *Node
 }
 
-// List is singly linked list.
-type List struct {
-	len   int
-	items []*Node
-}
-
-// NewList creates a new instance of list.
-func NewList() *List {
-	return &List{
-		len:   0,
-		items: make([]*Node, 0),
+func (n *Node) String() string {
+	cur := n
+	result := []interface{}{}
+	for cur != nil {
+		result = append(result, cur.Value)
+		cur = cur.Next
 	}
+	return fmt.Sprintf("%v", result)
 }
 
-// Len returns list's current size.
-func (l *List) Len() int {
-	return l.len
-}
-
-// Add inserts new item.
-func (l *List) Add(val interface{}) {
-	node := &Node{
-		Value: val,
-		Next:  nil,
+// IsEqual compares given node with current.
+func (n *Node) IsEqual(x *Node) bool {
+	cur := n
+	for cur != nil {
+		if cur.Value != x.Value {
+			return false
+		}
+		cur = cur.Next
+		x = x.Next
 	}
-	l.items = append(l.items, node)
-	l.len++
-	if l.len > 0 {
-		l.items[l.len-1].Next = node
-	}
+	return x == nil
 }
 
-// Del removes the kth last element from the list
-func (l *List) Del(k int) {
-	l.items = l.items[:l.len-k]
-	l.len = l.len - k
+// RemoveKth removes the kth last element from the list.
+func RemoveKth(head *Node, k int) {
+	slow, fast := head, head
+	for i := 0; i < k; i++ {
+		fast = fast.Next
+	}
+	prev := &Node{}
+	for fast != nil {
+		prev = slow
+		slow = slow.Next
+		fast = fast.Next
+	}
+	prev.Next = slow.Next
 }

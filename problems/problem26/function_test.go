@@ -5,37 +5,38 @@ import (
 )
 
 var testCases = []struct {
-	Given    *List
-	N        int
+	Given    *Node
 	K        int
-	Expected int
+	Expected *Node
 }{
 	{
-		Given:    NewList(),
-		N:        10,
-		K:        7,
-		Expected: 3,
+		Given:    &Node{1, &Node{2, &Node{3, &Node{4, &Node{5, nil}}}}},
+		K:        3,
+		Expected: &Node{1, &Node{2, &Node{4, &Node{5, nil}}}},
 	},
 	{
-		Given:    NewList(),
-		N:        7,
-		K:        6,
-		Expected: 1,
+		Given:    &Node{1, &Node{2, &Node{3, &Node{4, &Node{5, nil}}}}},
+		K:        2,
+		Expected: &Node{1, &Node{2, &Node{3, &Node{5, nil}}}},
 	},
 }
 
-func prepList(l *List, n int) {
-	for i := 0; i < n; i++ {
-		l.Add(i + 1)
+func TestRemoveKth(t *testing.T) {
+	for _, c := range testCases {
+		RemoveKth(c.Given, c.K)
+		if !c.Given.IsEqual(c.Expected) {
+			t.Errorf("failed: got %v, expected %v", c.Given, c.Expected)
+		}
 	}
 }
 
-func TestDel(t *testing.T) {
-	for _, c := range testCases {
-		prepList(c.Given, c.N)
-		c.Given.Del(c.K)
-		if c.Given.Len() != c.Expected {
-			t.Errorf("failed: got %v, expected %v", c.Given.Len(), c.Expected)
-		}
+var result *Node
+
+func BenchmarkRemoveKth(b *testing.B) {
+	var r *Node
+	for i := 0; i < b.N; i++ {
+		RemoveKth(testCases[0].Given, testCases[0].K)
+		r = testCases[0].Given
 	}
+	result = r
 }
