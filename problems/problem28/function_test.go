@@ -65,7 +65,19 @@ func TestJustifyText(t *testing.T) {
 	}
 }
 
-var result []string
+func TestJustifyText2(t *testing.T) {
+	for _, c := range testCases {
+		res := justifyText2(c.Given, c.K)
+		if !isEqual(res, c.Expected) {
+			t.Errorf("failed: got %v, expected %v, values %v", res, c.Expected, c.Given)
+		}
+	}
+}
+
+var (
+	result  []string
+	result2 []string
+)
 
 func BenchmarkJustifyText(b *testing.B) {
 	var r []string
@@ -73,4 +85,12 @@ func BenchmarkJustifyText(b *testing.B) {
 		r = justifyText(testCases[0].Given, testCases[0].K)
 	}
 	result = r
+}
+
+func BenchmarkJustifyText2(b *testing.B) {
+	var r []string
+	for i := 0; i < b.N; i++ {
+		r = justifyText2(testCases[0].Given, testCases[0].K)
+	}
+	result2 = r
 }
