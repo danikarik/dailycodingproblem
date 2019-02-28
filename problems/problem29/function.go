@@ -22,11 +22,11 @@ func encode(s string) string {
 			cnt++
 			continue
 		}
-		encoded += fmt.Sprintf("%v%s", cnt, string(seen))
+		encoded += strconv.Itoa(cnt) + string(seen)
 		seen = c
 		cnt = 1
 	}
-	encoded += fmt.Sprintf("%v%s", cnt, string(seen))
+	encoded += strconv.Itoa(cnt) + string(seen)
 	return encoded
 }
 
